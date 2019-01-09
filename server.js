@@ -3,7 +3,7 @@ var http = require("http").Server(app);
 var io = require("socket.io")(http)
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.send('Hello World')
 });
 
 io.on('connection', function(socket)  {
@@ -11,6 +11,11 @@ io.on('connection', function(socket)  {
 
     socket.on('chat message', function(message) {
         console.log("Incoming Message " + message)
+        io.emit('chat message', messasge) // Emits or broadcasts chat message to other users connected
+    })
+
+    socket.on('disconnect', function() {
+        console.log("User has disconnected!")
     })
 });
 
