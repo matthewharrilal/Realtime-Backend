@@ -16,6 +16,8 @@ io.on('connection', function(socket)  {
     });
 
     socket.on("createRoom", function(roomName){ // Just to highlight separation of concerns
+        console.log("CREATING ROOM " + roomName)
+        console.log("ALL ROOMS " + JSON.stringify(io.sockets.adapter.rooms))
         socket.join(roomName)
     });
 
@@ -25,7 +27,7 @@ io.on('connection', function(socket)  {
 
 
     socket.on('disconnect', function() {
-        console.log("User has disconnected!")
+        console.log("User has disconnected!") // No special teardown needed on our part
     });
 });
 
