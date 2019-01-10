@@ -1,6 +1,7 @@
 var server = require("express")();
 var http = require("http").Server(server);
 var io = require("socket.io")(http)
+var JSON = require("circular-json")
 
 server.get('/', (req, res) => {
     res.send('Hello World')
@@ -17,8 +18,9 @@ server.get('/', (req, res) => {
 
     socket.on("createRoom", function(roomName){ // Just to highlight separation of concerns
         console.log("CREATING ROOM " + roomName)
-        console.log("ALL ROOMS " + JSON.stringify(io.sockets.adapter.rooms)) // YOU CAN GIVE THE SPECIFIC SOCKET A NICKNAME
+        console.log("ALL ROOMS " + JSON.stringify(io.sockets.adapter.sids)) // YOU CAN GIVE THE SPECIFIC SOCKET A NICKNAME
         // AND THEN YOU CAN IDENTIFY THEM VIA THE NICKNAME
+        console.log("NUMBER OF CLIENTS " + Object.keys(io.sockets.adapter.sids).length)
         socket.join(roomName)
     });
 
