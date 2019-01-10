@@ -1,12 +1,12 @@
-var app = require("express")();
-var http = require("http").Server(app);
+var server = require("express")();
+var http = require("http").Server(server);
 var io = require("socket.io")(http)
 
-app.get('/', (req, res) => {
+server.get('/', (req, res) => {
     res.send('Hello World')
 });
 
-io.on('connection', function(socket)  {
+ io.on('connection', function(socket)  {
     console.log("User has connected!")
 
     socket.on('chat message', function(message) {
@@ -17,7 +17,8 @@ io.on('connection', function(socket)  {
 
     socket.on("createRoom", function(roomName){ // Just to highlight separation of concerns
         console.log("CREATING ROOM " + roomName)
-        console.log("ALL ROOMS " + JSON.stringify(io.sockets.adapter.rooms))
+        console.log("ALL ROOMS " + JSON.stringify(io.sockets.adapter.rooms)) // YOU CAN GIVE THE SPECIFIC SOCKET A NICKNAME
+        // AND THEN YOU CAN IDENTIFY THEM VIA THE NICKNAME
         socket.join(roomName)
     });
 
