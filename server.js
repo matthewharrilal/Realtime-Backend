@@ -9,28 +9,45 @@ server.get('/', (req, res) => {
 
  io.on('connection', function(socket)  {
     console.log("User has connected!")
+    // console.log("ROOMS WHEN SOCKET CONNECTS " + JSON.stringify(io.sockets.adapter.sids[socket.id])) //Nothing becuase the socket id is issues a new id for the socket connection that occurs when reconnecting (maybe there is something there )
 
     socket.on('chat message', function(message) {
-        console.log("SOCKET ID " + socket.id)
+        console.log("SOCKET ID " + socket.username)
         console.log("Incoming Message " + message)
-        // io.emit('chat message', messasge) // Emits or broadcasts chat message to other users connected
+        io.emit('chat message', message) // Emits or broadcasts chat message to other users connected
     });
+
+
+    socket.on("socketUsername", function(username) {
+        console.log("SOCKET USERNAME " + username)
+        socket.nickname = username
+    })
 
     socket.on("createRoom", function(roomName){ // Just to highlight separation of concerns
         console.log("CREATING ROOM " + roomName)
-        console.log("ALL ROOMS " + JSON.stringify(io.sockets.adapter.sids[socket.id])) // YOU CAN GIVE THE SPECIFIC SOCKET A NICKNAME
-        // AND THEN YOU CAN IDENTIFY THEM VIA THE NICKNAME
-        console.log("NUMBER OF ACTIVE ROOMS " + Object.keys(io.sockets.adapter.rooms).length)
+        console.log("All Room Connections " + socket.nickname, " ", io.sockets.adapter.sids[socket.id])
         socket.join(roomName)
     });
 
     socket.on("joinRoom", function(roomName) { // Just to highlight separation of concerns
+        console.log(" " + socket.id + " " + " has joined the room " + roomName)
+        // console.log("All Room Connections " + socket.nickname, " ", io.)
         socket.join(roomName)
+        io.of("/").in(roomName).clients((error, clients) => {
+            if (error) {
+                console.log(error)
+            }
+
+            console.log("Connected clients " + clients)
+        })
+        
     });
 
     socket.on("leaveRoom", function(roomName) {
+        console.log("LEAVING ROOM " + roomName)
         socket.leave(roomName);
     });
+
 
 
     socket.on('disconnect', function() {
@@ -38,6 +55,10 @@ server.get('/', (req, res) => {
     });
 
 });
+
+function archiveRoom() {
+    // Archive Room when number of users turn to 0 ????? NEED MORE RESEARCH
+}
 
 
 http.listen(4000, function() {
