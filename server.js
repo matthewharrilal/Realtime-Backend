@@ -30,16 +30,23 @@ server.get('/', (req, res) => {
     });
 
     socket.on("joinRoom", function(roomName) { // Just to highlight separation of concerns
-        console.log(" " + socket.id + " " + " has joined the room " + roomName)
+        console.log(" " + socket.id + " has joined the room " + roomName)
         // console.log("All Room Connections " + socket.nickname, " ", io.)
         socket.join(roomName)
+        socket_id_map = {} // Mapping client ids to the nickname of the socket
+
         io.of("/").in(roomName).clients((error, clients) => {
             if (error) {
                 console.log(error)
             }
-
-            console.log("Connected clients " + clients)
+            
+            // console.log("Connected clients " + clients)
+            for (i=0; i < clients.length; i++) {
+                client = clients[i]
+                console.log("CLIENT " + client)
+            }
         })
+        // console.log("All Room Connections " + socket.nickname, " ", io.sockets.adapter.sids[socket.id])
         
     });
 
