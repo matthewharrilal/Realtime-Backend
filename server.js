@@ -11,11 +11,11 @@ server.get('/', (req, res) => {
     console.log("User has connected!")
     // console.log("ROOMS WHEN SOCKET CONNECTS " + JSON.stringify(io.sockets.adapter.sids[socket.id])) //Nothing becuase the socket id is issues a new id for the socket connection that occurs when reconnecting (maybe there is something there )
 
-    socket.on('chat message', function(message) {
+    socket.on('chat message', function(message, roomName) {
         console.log("SOCKET ID " + socket.username + " " + socket.id)
         console.log("Incoming Message " + message)
-        console.log("Outgoing Message " + message)
-        socket.broadcast.emit('chat message', message) // Emits or broadcasts chat message to other users connected
+        console.log("Outgoing Message " + message + " Room name" + roomName)
+        socket.broadcast.to(roomName).emit('chat message', message) // Emits or broadcasts chat message to other users connected
     });
 
 
