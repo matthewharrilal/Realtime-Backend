@@ -14,7 +14,7 @@ server.get('/', (req, res) => {
     socket.on('chat message', function(message) {
         console.log("SOCKET ID " + socket.username + " " + socket.id)
         console.log("Incoming Message " + message)
-        // message.messageSender = false
+        console.log("Outgoing Message " + message)
         socket.broadcast.emit('chat message', message) // Emits or broadcasts chat message to other users connected
     });
 
