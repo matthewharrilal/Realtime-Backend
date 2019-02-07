@@ -33,6 +33,9 @@ io.on('connection', function (socket) {
             localStorage.setItem(username, socket.id) // saving the item in local storage
 
             console.log("SOCKET USERNAME " + username)
+
+            // Emit that the username chosen is a successful username
+            socket.emit("validUsername", username)
         }
 
         console.log("Username after setting in local storage " + localStorage.getItem(username))
